@@ -10,7 +10,7 @@ app.use(express.static("public"));
 
 
 app.get("/", (req, res) => {
-  res.status(200).send("Hello World");
+  res.status(200).render("index");
 });
 
 const port = 3000;
