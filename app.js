@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const session = require("express-session");
 const pageRouter = require("./routes/pageRoute");
 const courseRouter = require("./routes/courseRoute");
 const categoryRouter = require("./routes/categoryRoute");
@@ -23,11 +24,21 @@ mongoose
 //templete engine
 app.set("view engine", "ejs");
 
+//global variable
+global.userIN = null;
+
 //middleware
+
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(
+  session({ secret: "smartedu", resave: false, saveUninitialized: true })
+);
+app.use("*", (req, res, next) => {
+  userIN = req.session.userId;
+   next();
+ });
 //routes
 app.use("/", pageRouter);
 app.use("/courses", courseRouter);
