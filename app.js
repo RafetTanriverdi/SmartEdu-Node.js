@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const MongoStore = require("connect-mongo");
 const session = require("express-session");
 const pageRouter = require("./routes/pageRoute");
 const courseRouter = require("./routes/courseRoute");
@@ -33,12 +34,21 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
-  session({ secret: "smartedu", resave: false, saveUninitialized: true })
+  session({
+    secret: "smartedu",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: "mongodb://localhost:27017/smartEduDb",
+    }),
+  })
 );
 app.use("*", (req, res, next) => {
   userIN = req.session.userId;
-   next();
- });
+  next();
+});
+
+
 //routes
 app.use("/", pageRouter);
 app.use("/courses", courseRouter);

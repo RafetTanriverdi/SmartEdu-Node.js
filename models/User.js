@@ -12,12 +12,16 @@ const userSchema = new Schema({
     unique: true,
     required: true,
   },
-    password: {
-        type: String,
-        required: true,
-    },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    default: "student",
+    enum: ["student", "teacher", "admin"],
+  },
 });
-
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
